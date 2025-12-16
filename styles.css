@@ -1,0 +1,226 @@
+/* =====================================
+   VARIABLES (Tema Gamer Oscuro/Neón)
+   ===================================== */
+:root {
+    /* Colores Principales */
+    --color-bg-deep: #1a1a2e;
+    --color-text-light: #e0e0e0;
+    --color-primary-neon: #64ffda; /* Aqua brillante */
+    --color-matched-neon: #ff6699; /* Rosa neón */
+    --color-revealed-bg: #4c5270; /* Gris oscuro/azulado */
+    --color-hidden-bg: #333956;  /* Azul oscuro */
+
+    /* Sombras/Brillos */
+    --shadow-deep: 0 10px 30px rgba(0, 0, 0, 0.7);
+    --shadow-neon-primary: 0 0 10px var(--color-primary-neon), 0 0 20px rgba(100, 255, 218, 0.5);
+    --shadow-neon-matched: 0 0 10px var(--color-matched-neon), 0 0 20px rgba(255, 102, 153, 0.5);
+
+    /* Transiciones */
+    --transition-fast: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* =====================================
+   BODY y CONTENEDOR PRINCIPAL
+   ===================================== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background: var(--color-bg-deep);
+    color: var(--color-text-light);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    perspective: 1000px; /* Necesario para la animación 3D de las tarjetas */
+}
+
+/* Marco "Gamer" que da forma al juego */
+.game-container {
+    background: #252540; /* Fondo del marco */
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: var(--shadow-deep), 0 0 50px rgba(100, 255, 218, 0.2); /* Sombra y brillo base */
+    border: 3px solid var(--color-primary-neon); /* Borde primario brillante */
+    max-width: 500px;
+    width: 100%;
+    transition: var(--transition-fast);
+}
+
+.game-container:hover {
+    box-shadow: var(--shadow-deep), 0 0 70px rgba(100, 255, 218, 0.4);
+}
+
+h1 {
+    font-size: 1.8rem;
+    color: var(--color-primary-neon);
+    text-shadow: 0 0 5px var(--color-primary-neon);
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 0.8em;
+    font-weight: 400;
+    color: #a0a0ff;
+}
+
+/* =====================================
+   INFO Y BOTONES
+   ===================================== */
+.info {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding: 10px;
+    background: #1e1e35;
+    border-radius: 10px;
+    border: 1px solid #333;
+}
+
+.info p {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-text-light);
+}
+
+.info span {
+    color: var(--color-primary-neon);
+    font-weight: 800;
+    margin-left: 5px;
+}
+
+button {
+    padding: 8px 15px;
+    cursor: pointer;
+    border: 2px solid var(--color-primary-neon);
+    background: #1e1e35;
+    color: var(--color-primary-neon);
+    border-radius: 8px;
+    font-weight: 700;
+    transition: var(--transition-fast);
+    box-shadow: 0 0 5px rgba(100, 255, 218, 0.5);
+}
+
+button:hover {
+    background: var(--color-primary-neon);
+    color: var(--color-bg-deep);
+    box-shadow: 0 0 15px var(--color-primary-neon);
+}
+
+/* =====================================
+   TABLERO Y CARTAS
+   ===================================== */
+
+.board {
+    width: 100%; /* Ajuste a 100% del contenedor */
+    max-width: 420px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px; /* Reducir gap ligeramente */
+    margin: 0 auto;
+}
+
+.card {
+    /* Las dimensiones se ajustan al grid, pero mantenemos un aspecto */
+    width: 100%;
+    height: 90px; 
+    
+    background: var(--color-hidden-bg);
+    color: var(--color-text-light);
+    font-size: 2.2rem; /* Iconos más grandes */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+    
+    /* Efecto 3D para el giro */
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease-in-out, background 0.3s, box-shadow 0.3s;
+    
+    /* Giro Vertical (eje X) */
+    transform: rotateX(180deg); 
+    
+    /* Estilo de sombra "oculto" */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+/* Cara trasera (contenido) */
+.card::before {
+    content: attr(data-icon);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backface-visibility: hidden;
+    /* Se asegura que solo se vea el contenido cuando la tarjeta está revelada */
+}
+
+/* Estado Revelado */
+.card.revealed {
+    background: var(--color-revealed-bg);
+    /* El giro se ajusta al eje X (vertical) */
+    transform: rotateX(0deg); 
+    /* Brillo sutil al revelar */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), var(--shadow-neon-primary);
+}
+
+/* Estado Emparejado */
+.card.matched {
+    background: var(--color-revealed-bg); /* Mantiene el color revelado */
+    cursor: default;
+    /* Brillo más intenso y de otro color para indicar match */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7), var(--shadow-neon-matched);
+    animation: match-pulse 0.5s ease-out;
+}
+
+/* Animación de Match (pulso suave) */
+@keyframes match-pulse {
+    0% { transform: scale(1) rotateX(0deg); }
+    50% { transform: scale(1.05) rotateX(0deg); }
+    100% { transform: scale(1) rotateX(0deg); }
+}
+
+/* =====================================
+   RESPONSIVE
+   ===================================== */
+@media (max-width: 550px) {
+    .game-container {
+        padding: 20px;
+        border-radius: 15px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    .board {
+        gap: 8px;
+    }
+    
+    .card {
+        height: 70px;
+        font-size: 1.8rem;
+    }
+
+    .info {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+    
+    .info p {
+        text-align: left;
+    }
+    
+    button {
+        width: 100%;
+    }
+}
